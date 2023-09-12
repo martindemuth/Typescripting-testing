@@ -1,4 +1,6 @@
-import { CreateResponses, Faker } from "./types"
+
+import { CreateResponses, Faker, Response } from "./types"
+import { string } from "zod"
 
 const fakeAnswers: string[] = [
   "GlitterGlo Lipstick",
@@ -21,10 +23,10 @@ const getRandomId = () => {
 
 // TODO: Oppgave 1 - Not implemented
 const faker: Faker = {
-  id,
-  answer,
-  score,
-  category,
+  id: getRandomId, 
+  answer: () => getRandomItem(fakeAnswers),
+  score: () => getRandomItem(fakeScores),
+  category: () => getRandomItem(fakeCategories),
 }
 
 // TODO: Oppgave 1 - Not implemented
@@ -33,6 +35,17 @@ const createResponses: CreateResponses = ({
   count,
   faker,
 }) => {
+  const responses = new Map(existingResponses)
+  for (let i = 0; i < count; i++) {
+    const response = {
+      id: faker.id(), 
+      questionId: '1', 
+      score: faker.score(), 
+      category: faker.category(),
+      answer: faker.answer(),
+    }
+    responses.set(`response-1${i}`, response)
+  }
   return responses
 }
 
@@ -42,3 +55,4 @@ const calcAverageScore = (responses: Map<string, Response>) => {
 }
 
 export { createResponses }
+export { getRandomId}
